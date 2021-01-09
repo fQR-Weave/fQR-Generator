@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>fQR Weave</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://unpkg.com/arweave/bundles/web.bundle.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Cairo" rel="stylesheet" />
+  <script src="tron.js"></script>
+
+  
+
+  
+
+
+    <style>
+* {box-sizing: border-box;}
+
+body { 
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+
+  font-family: "Cairo";
+  font-size: 23px
+}
+
+h2 {
+
+  font-family: "Tajawal";
+  font-size: 25px
+}
+
+h3 {
+
+  font-family: "Tajawal";
+  font-size: 17px
+}
+
+p {
+  font-family: "Cairo";
+  font-size: 19px
+}
+
+label {
+  font-family: "Cairo";
+  font-size: 20px
+}
+
+button {
+  font-family: "Cairo";
+  font-size: 15px
+}
+.header {
+  overflow: hidden;
+  background-color: #935d8c;
+  padding: 20px 10px;
+}
+
+.header a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header a:hover {
+
+  color: black;
+}
+
+.header a.active {
+  background-color: black;
+  color: white;
+}
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: left;
+    /*display: block;*/
+    text-align: left;
+  }
+  
+  .header-right {
+    float: right;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="https://fqrweave.tech" style="color: white; font-family:'Tajawal'; font-size: 30px">fQR Weave - ICTD</a>
+  <div class="header-right">
+    <a class="active" href="https://fqrweave.tech/alpha/home">Home</a>
+  </div>
+</div> <br><br>
+
+<center><h3 style="padding: 40px"><b>To login, please import your Arweave key-file</b></h3></center> <br>
+
+<center><a style="float: center"><img src="https://i.ibb.co/5xF9SQ2/Arr.jpg" alt="Arr" border="0"></a></center>
+
+<center><h3 style="padding: 40px"><b>Generators can interact with the User Interface (UI) to generate 1 fQR/r . If you want
+to generate fQR from datasets or as batch generating, please use fqrweaveSDK .</b></h3><h3 style="padding: 40px"><b>The current fQR Generator instance represents a certificates authenticator</b></h3></center>
+
+    <center><div style="background-color: lightgray; height: 250px">
+      
+      <br><h2>Import your JSON keyfile</h2>
+        <input type="file" id="selectFiles" value="Import" style="float: center; border-radius: 30px; background-color: #000000; color: white; border-color: black; cursor: pointer"><br>
+  
+    <!-- <button id="import" style="float: center;">Import</button> -->
+ 
+        <br><button id="login" style="float: center; border-radius: 30px; background-color: #000000; color: white; border-color: black; cursor: pointer; width: 100px"> Login</button>
+        <p id="logged-wallet"></p>
+
+    </div></center> <br><br>
+  
+
+       <center><p><b><i>create a certificate's fingerprint (fQR):</i></b></p></center> <br><br>
+       
+        <center><div style="border-style: dashed; border-radius: 50px; height: 600px; width: 300px; float: center">
+          
+          <br><br><center><label for="product">Student Full Name: </label><center><br>
+
+        <input type="text" id="student" name="product" required
+                minlength="1" maxlength="100" size="20" style="border-width: 5px; border-style: solid"> <br><br>
+
+             <center><label for="product">Course Name: </label><center><br>
+
+        <input type="text" id="student-bd" name="product" required min="0" 
+                minlength="1" maxlength="100" size="20" style="border-width: 5px; border-style: solid"> <br><br>
+
+        <center><label for="product">Course Duration (Hours): </label><center><br>
+
+        <input type="number" id="course-name" name="exp" placeholder="Training Hours" min="1" 
+                minlength="1" maxlength="100" size="20" style="border-width: 5px; border-style: solid"> <br><br>
+
+
+         <center><label for="product">Date Of Issuance: </label><center><br>
+
+        <input type="date" id="course-date" name="exp" required
+                minlength="1" maxlength="100" size="20" style="border-width: 5px; border-style: solid"> <br><br>
+
+        <center><label for="product">Accredited Trainers: </label><center><br>
+
+        <input type="text" id="trainers" name="product" required min="0" 
+                minlength="1" maxlength="100" size="20" style="border-width: 5px; border-style: solid"> <br><br>
+
+
+        <button id="submit-order" style="float: center; border-radius: 30px; background-color: #000000; color: white; border-color: black; cursor: pointer">generate</button>
+
+        <p id="prdct_id"></p>
+       
+        <br><br>
+        <div id="placeHolder"></div>
+
+        </div><br><br><br><br><br><br></center>
+
+  
+
+</center> 
+
+
+<script type="text/javascript">
+  
+  let key;
+
+  document.getElementById('login').onclick = function() {
+  var files = document.getElementById('selectFiles').files;
+  console.log(files);
+  if (files.length <= 0) {
+    return false;
+  }
+  
+  var fr = new FileReader();
+
+
+
+  
+  fr.onload = function(e) { 
+  // console.log(typeof e.target.result);
+    var result = JSON.parse(e.target.result);
+    console.log(result)
+    console.log(typeof result)
+    var formatted = JSON.stringify(result, null, 2);
+    // document.getElementById('result').value = formatted;
+    // console.log(formatted)
+    // return formatted
+
+  key = result;
+  
+  }
+  
+  fr.readAsText(files.item(0));
+ 
+
+
+};
+
+  
+    
+    
+
+
+      document.getElementById("login").addEventListener("click", function(){
+
+
+
+      const arweave = Arweave.init();
+     
+      arweave.network.getInfo().then(console.log);
+      // arweave.transactions.getData('brFuIk1XPzJJCs8YucYms74f__1EdUY-RkJil7EEB78', {decode: true, string: true}).then(data => {
+    // console.log(data);
+
+      var obj = setInterval(async ()=>{
+      clearInterval(obj)
+    
+      let pbAdrs;
+      arweave.wallets.jwkToAddress(key).then((address) => {
+        
+          document.getElementById('logged-wallet').innerHTML = (`logged as: <b>${address}</b> <br>`);
+        
+
+  });
+
+
+// Plain text
+  
+  });
+
+
+
+      })
+
+
+
+  document.getElementById('submit-order').addEventListener("click", function(){
+    const arweave = Arweave.init();
+    arweave.network.getInfo().then(console.log);
+
+    var obj = setInterval(async ()=>{
+      clearInterval(obj)
+
+      const metadata = `<!DOCTYPE html><html><head><title>fQR Verification</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><style>table,th,td{border: 1px solid black;}</style></head><body><center><h1>ICTD certificate</h1></center> <br><br><center><div><table><tr><th>Data</th><th>info</th></tr><tr><td>Student Name</td><td>${document.getElementById('student').value}</td></tr><tr><td>Course Name</td><td>${document.getElementById('student-bd').value}</td></tr><tr><td>Course Duration (Hours)</td><td>${document.getElementById('course-name').value}</td></tr><tr><td>Date Of Issuance</td><td>${document.getElementById('course-date').value}</td></tr><tr><td>Accredited Trainers</td><td>${document.getElementById('trainers').value}</td></tr></table></div></center><div style="margin-left: 1em"><p>Manual checking: to check data's legitimacy, please go to <a href="https://viewblock.io/arweave">viewblock</a> and input the transaction ID to check the generator address </p></div></body></html>`
+    
+    
+    let transaction = await arweave.createTransaction({
+    data: String(metadata)
+  }, key);
+
+  transaction.addTag('Content-Type', 'text/html');
+  transaction.addTag('Generator', 'ICTD');
+  transaction.addTag('fQR Type', 'certificate');
+  await arweave.transactions.sign(transaction, key);
+  const response = await arweave.transactions.post(transaction);
+
+
+   console.log('product ID: ',transaction.id);
+   console.log(transaction)
+
+  
+
+   await arweave.transactions.getData(String(transaction.id), {decode: true, string: true}).then(function(data) {document.getElementById('prdct_id').innerHTML = (`<a href="https://arweave.net/${transaction.id}">Certification ID</a>`)
+
+    // Generating a QR code from transaction.id string
+      var typeNumber = 4;
+      var errorCorrectionLevel = 'L';
+      var qr = qrcode(typeNumber, errorCorrectionLevel);
+
+
+      qr.addData(transaction.id);
+      qr.make();
+   
+   document.getElementById('placeHolder').innerHTML = qr.createImgTag();
+
+
+
+
+
+                })
+  } );
+
+   });
+
+    
+
+  
+
+
+  </script>
+
+    
+
+    <br><br><br><br>
+
+<div style="position: static; left: 0; bottom: 0; width: 100%; background-color: #935d8c; color: white; ">
+  <div style="text-align: left; margin-left: 1.5em">
+    <br>
+ 
+    <a href="https://www.arweave.org/wallet" style="text-decoration: none; color: #D5D5D5"><p> # Claim A Token<p></a>
+      <a href="https://arweave.org" style="text-decoration: none; color: #D5D5D5"><p> # Arweave.org<p></a>
+        <a href="https://www.arweave.org/technology#permaweb" style="text-decoration: none; color: #D5D5D5"><p> # PermaWeb<p></a>
+  </div>
+
+  <div style="text-align: right; margin-right: 1.5em">
+    <br>
+ 
+    <a href="https://t.me/fqr_weave" style="text-decoration: none; color: #D5D5D5"><p> # Telegram<p></a>
+      <a href="https://twitter.com/Fqr_Weave" style="text-decoration: none; color: #D5D5D5"><p> # Twitter<p></a>
+        <a href="https://discord.gg/pcdGGs" style="text-decoration: none; color: #D5D5D5"><p> # Discord<p></a>
+        <a href="https://github.com/fQR-Weave" style="text-decoration: none; color: #D5D5D5"><p> # Github<p></a>
+  </div>
+
+  <div style="text-align: center; color: #D5D5D5"><p>© Copyright 2020. all rights reserved</p></div>
+  
+</div>
+  
+</div>    
+</body>
+<script type="text/javascript" src="console.js"></script>
+
+</html>
