@@ -1,0 +1,86 @@
+* {box-sizing: border-box;}
+
+body { 
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+
+  font-family: "Cairo";
+  font-size: 23px
+}
+
+h2 {
+
+  font-family: "Tajawal";
+  font-size: 25px
+}
+
+h3 {
+
+  font-family: "Tajawal";
+  font-size: 17px
+}
+
+p {
+  font-family: "Cairo";
+  font-size: 19px
+}
+
+label {
+  font-family: "Cairo";
+  font-size: 20px
+}
+
+button {
+  font-family: "Cairo";
+  font-size: 15px
+}
+.header {
+  overflow: hidden;
+  background-color: #935d8c;
+  padding: 20px 10px;
+}
+
+.header a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px; 
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header a:hover {
+
+  color: black;
+}
+
+.header a.active {
+  background-color: black;
+  color: white;
+}
+
+.header-right {
+  float: right;
+}
+
+@media screen and (max-width: 500px) {
+  .header a {
+    float: left;
+    /*display: block;*/
+    text-align: left;
+  }
+  
+  .header-right {
+    float: right;
+  }
+}
